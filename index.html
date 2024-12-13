@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family:sans-serif;
+    font-weight: 300;
+}
+main{
+    display:flex;
+}
+.container {
+    margin: 1rem;
+    border: 1px black solid;
+    height: 30rem;
+    width: 60rem;
+    padding: .5rem;
+    align-items: flex-end;
+    display: flex;
+
+}
+
+
+.bar{
+    display: block;
+    background-color: black;
+    width: .5rem;
+    height: 5rem;
+    padding: 0;
+    margin: 0.1rem;
+
+}
+.negative{
+    background-color: black;
+}
+.positive{
+    background-color: white;
+    border: 1px solid black;
+}
+.graduate{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+
+
+
+.control{
+    margin-top: 1rem;
+}
+h1{
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+h2{
+    border-bottom: 1px solid black; 
+    font-weight: 600;
+    margin-top: 1rem;
+}
+h3{
+    margin-top: 1rem;
+}
+#selectpret1,#selectpret2,#selectpret3,p{
+    font-size: .75rem;
+
+}
+.choosepret{
+    display: flex;
+}
+.choosepret article {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: .25rem;
+}
+.chooseaction{
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.chooseaction article{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+</style>
+</head>
+<body>
+    <main>
+        <section class="container">
+            <div class="graduate">
+                <p>1000</p>
+                <p>750</p>
+                <p>500</p>
+                <p>250</p>
+                <p>0</p>
+            </div>
+            <span class="bar b60"></span>
+            <span class="bar b59"></span>
+            <span class="bar b58"></span>
+            <span class="bar b57"></span>
+            <span class="bar b56"></span>
+            <span class="bar b55"></span>
+            <span class="bar b54"></span>
+            <span class="bar b53"></span>
+            <span class="bar b52"></span>
+            <span class="bar b51"></span>
+            <span class="bar b50"></span>
+            <span class="bar b49"></span>
+            <span class="bar b48"></span>
+            <span class="bar b47"></span>
+            <span class="bar b46"></span>
+            <span class="bar b45"></span>
+            <span class="bar b44"></span>
+            <span class="bar b43"></span>
+            <span class="bar b42"></span>
+            <span class="bar b41"></span>
+            <span class="bar b40"></span>
+            <span class="bar b39"></span>
+            <span class="bar b38"></span>
+            <span class="bar b37"></span>
+            <span class="bar b36"></span>
+            <span class="bar b35"></span>
+            <span class="bar b34"></span>
+            <span class="bar b33"></span>
+            <span class="bar b32"></span>
+            <span class="bar b31"></span>
+            <span class="bar b30"></span>
+            <span class="bar b29"></span>
+            <span class="bar b28"></span>
+            <span class="bar b27"></span>
+            <span class="bar b26"></span>
+            <span class="bar b25"></span>
+            <span class="bar b24"></span>
+            <span class="bar b23"></span>
+            <span class="bar b22"></span>
+            <span class="bar b21"></span>
+            <span class="bar b20"></span>
+            <span class="bar b19"></span>
+            <span class="bar b18"></span>
+            <span class="bar b17"></span>
+            <span class="bar b16"></span>
+            <span class="bar b15"></span>
+            <span class="bar b14"></span>
+            <span class="bar b13"></span>
+            <span class="bar b12"></span>
+            <span class="bar b11"></span>
+            <span class="bar b10"></span>
+            <span class="bar b9"></span>
+            <span class="bar b8"></span>
+            <span class="bar b7"></span>
+            <span class="bar b6"></span>
+            <span class="bar b5"></span>
+            <span class="bar b4"></span>
+            <span class="bar b3"></span>
+            <span class="bar b2"></span>
+            <span class="bar b1"></span>
+            <span class="bar b0"></span>
+        </section>
+        <section class="control">
+            <h1>Contrôles</h1>
+
+            <h2>Argent</h2>
+            <p> <span id="money">0</span> $</p>
+
+            <h2>Prêt à la banque</h2>
+            <h3>Valeur du prêt</h3>
+            <section class="choosepret">
+                <article>
+                    <p>1 000$</p>
+                    <button id="selectpret1">Souscrire</button>
+                </article>
+                <article>
+                    <p>10 000$</p>
+                    <button id="selectpret2">Souscrire</button>
+                </article>
+                <article>
+                    <p>100 000$</p>
+                    <button id="selectpret3">Souscrire</button>
+                </article>
+            </section>
+            <h3>Taux d'empunt</h3>
+            <p> <span id="Inputtaux">3</span> %</p>    
+            <h3>Intérêts à payer</h3>
+            <p> <b id="interet">0</b> $</p>   
+            <h3>Temps avant remboursement</h3>
+            <p> <b id="Trembousement">0</b> secondes</p>
+
+            <h2>Actions en Bourses</h2>
+            <h3>Valeur de l'action</h3>
+            <p> <b id="Vmarche">0</b> $</p>
+            <section class="chooseaction">
+                <article>
+                    <p> <b id="Vacheter">0</b>   $</p>
+                    <button id="acheter">Acheter</button>
+                </article>
+                <article>
+                    <p> <b id="Vvendre">0</b>   $</p>
+                    <button id="vendre">Vendre</button>
+                </article>
+            </section>
+
+        </section>
+
+    </main>
+<script>
+
+let valeurPretEl = document.querySelector('#Inputtaux');
+let moneyEl = document.querySelector('#money');
+let money = 0;
+
+const buttunPret1 = document.querySelector('#selectpret1');
+document.querySelector('#selectpret1').addEventListener("click", () =>{
+    startTimer1 = 1;
+    money = money -1000;
+    moneyEl.textContent = money;
+    
+});
+
+let valeurPret = 1;
+let startTimerPret = 0;
+
+window.setInterval(() => {
+    valeurPret = valeurPret + random(0, 3);
+    valeurPretEl.textContent = valeurPret;
+}, 5000);
+
+
+
+function random(min, max) {
+  return Math.round(Math.random() * (max - min) + min)-1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
