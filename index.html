@@ -167,7 +167,7 @@ h3{
             <span class="bar b3"></span>
             <span class="bar b2"></span>
             <span class="bar b1"></span>
-            <span class="bar b0"></span>
+            <span id="b0" class="bar b0"></span>
         </section>
         <section class="control">
             <h1>Contrôles</h1>
@@ -217,33 +217,110 @@ h3{
     </main>
 <script>
 
-let valeurPretEl = document.querySelector('#Inputtaux');
 let moneyEl = document.querySelector('#money');
+let moneyMinusEl = document.querySelector('#interet');
+let valeurPretEl = document.querySelector('#Inputtaux');
+let timerPretEl = document.querySelector('#Trembousement');
+let valeurBourseEl = document.querySelector('#Vmarche');
+let b0El = document.querySelector('#b0');
+
 let money = 0;
+let moneyMinus = 0;
+let valeurPret = 1;
+let timerPret = 0;
+let validationPret = true;
+let isRunning = false;
+let isfinished = false;
+let valeurBourse = 500;
+
+
 
 const buttunPret1 = document.querySelector('#selectpret1');
-document.querySelector('#selectpret1').addEventListener("click", () =>{
-    startTimer1 = 1;
-    money = money -1000;
+const buttunPret2 = document.querySelector('#selectpret2');
+const buttunPret3 = document.querySelector('#selectpret3');
+
+
+buttunPret1.addEventListener("click", () =>{
+    if (isRunning) {
+        return;
+    }
+    isRunning = true;
+    isfinished = false;
+    timerPret = 60;
+    money = money + 1000;
+    moneyMinus = moneyMinus + (1000 + 1000 * (valeurPret/100));
+    moneyMinusEl.textContent = moneyMinus;
     moneyEl.textContent = money;
-    
+    startTimerPret ();
+    return;
 });
 
-let valeurPret = 1;
-let startTimerPret = 0;
+function startTimerPret () {
+    if (isfinished) {
+        return;
+    }
+    window.setInterval(() => {
+        if (isfinished) {
+            return;
+        }
+        if (timerPret>0){
+            timerPret = timerPret - 1;
+            timerPretEl.textContent = timerPret;
+        }
+        if (timerPret <= 0){
+            money = money - moneyMinus;
+            moneyEl.textContent = money;
+            moneyMinus = 0;
+            moneyMinusEl.textContent = moneyMinus;
+            isRunning = false;
+            isfinished = true;
+            console.log("gerard")
+            return;
+            
+        }
+        console.log ("philippe-michel")
+    }, 1000);
+}
+
+
+
+
 
 window.setInterval(() => {
-    valeurPret = valeurPret + random(0, 3);
+    valeurPret = valeurPret + randomPret(0, 3);
     valeurPretEl.textContent = valeurPret;
-}, 5000);
+}, 10000);
 
 
 
-function random(min, max) {
+function randomPret(min, max) {
   return Math.round(Math.random() * (max - min) + min)-1;
 }
 
 
+window.setInterval(() => {
+    valeurBourse = valeurBourse + randomBourse(0, 50);
+    valeurBourseEl.textContent = valeurBourse;
+    if(valeurBourse >= 1000){
+        valeurBourse =valeurBourse - 100;
+        console.log(1000);
+    }
+    if(valeurBourse <= 0){
+        valeurBourse =valeurBourse + 100;
+        console.log(0);
+    }
+}, 1000);
+
+
+
+function randomBourse(min, max) {
+  return Math.round(Math.random() * (max - min) + min)-25;
+}
+
+
+function changeBar () {
+    document.querySelector("p").style.backgroundColor = "red";
+}
 
 
 
