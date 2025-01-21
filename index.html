@@ -16,6 +16,11 @@
 main{
     display:flex;
 }
+button{
+    padding: .1rem;
+    padding-left: .3rem;
+    padding-right: .3rem;
+}
 .container {
     margin: 1rem;
     border: 1px black solid;
@@ -92,12 +97,15 @@ h3{
     flex-direction: column;
     align-items: center;
 }
+.fin{
+    margin: 5rem;
+}
 
 
 </style>
 </head>
 <body>
-    <main>
+    <main id="main">
         <section class="container">
             <div class="graduate">
                 <p>1000</p>
@@ -169,36 +177,41 @@ h3{
             <span id="b0"class="bar b0"></span>
         </section>
         <section class="control">
+            <p id="timer"></p>
             <h1>Contrôles</h1>
 
             <h2>Argent</h2>
             <p> <span id="money">0</span> $</p>
 
-            <h2>Prêt à la banque</h2>
-            <h3>Valeur du prêt</h3>
-            <section class="choosepret">
-                <article>
-                    <p>1 000$</p>
-                    <button id="selectpret1">Souscrire</button>
-                </article>
+            <section id="pretContainer">
+                <h2>Prêt à la banque</h2>
+                <h3>Valeur du prêt</h3>
+                <section class="choosepret">
+                    <article>
+                        <p>1 000$</p>
+                        <button id="selectpret1">Souscrire</button>
+                    </article>
+                </section>
+                <h3>Taux d'empunt</h3>
+                <p> <span id="Inputtaux">3</span> %</p>    
+                <h3>Intérêts à payer</h3>
+                <p> <b id="interet">0</b> $</p>   
+                <h3>Temps avant remboursement</h3>
+                <p> <b id="Trembousement">0</b> secondes</p>
             </section>
-            <h3>Taux d'empunt</h3>
-            <p> <span id="Inputtaux">3</span> %</p>    
-            <h3>Intérêts à payer</h3>
-            <p> <b id="interet">0</b> $</p>   
-            <h3>Temps avant remboursement</h3>
-            <p> <b id="Trembousement">0</b> secondes</p>
+
+
 
             <h2>Actions en Bourses</h2>
             <h3>Valeur de l'action</h3>
             <p> <b id="Vmarche">0</b> $</p>
             <section class="chooseaction">
                 <article>
-                    <p> <b id="Vacheter">0</b>   $</p>
+                    <p> <b id="Vacheter"></b>   $</p>
                     <button id="acheter">Acheter</button>
                 </article>
                 <article>
-                    <p> <b id="Vvendre">0</b>   $</p>
+                    <p> <b id="Vvendre"></b>   $</p>
                     <button id="vendre">Vendre</button>
                 </article>
             </section>
@@ -206,13 +219,30 @@ h3{
         </section>
 
     </main>
+    <section class="fin">
+        <h1 id="timeReload">temps</h1>
+        <button id="reload">Relancer</button>
+    </section>
+    
 <script>
 
+let main =document.querySelector('#main');
 let moneyEl = document.querySelector('#money');
 let moneyMinusEl = document.querySelector('#interet');
 let valeurPretEl = document.querySelector('#Inputtaux');
 let timerPretEl = document.querySelector('#Trembousement');
 let valeurBourseEl = document.querySelector('#Vmarche');
+let pretContainer = document.querySelector('#pretContainer');
+
+let valeurAchat = 0;
+let valeurVente = 0;
+let acheterEl = document.querySelector('#acheter');
+let vendreEl = document.querySelector('#vendre');
+let acheterText = document.querySelector('#Vacheter');
+let vendreText = document.querySelector('#Vvendre');
+let reloadEl = document.querySelector('#reload');
+let timerEl = document.querySelector('#timer');
+let timeReload = document.querySelector('#timeReload');
 
 let b0El = document.querySelector('#b0');
 let b1El = document.querySelector('#b1');
@@ -286,6 +316,69 @@ let isRunning = false;
 let isFinished = false;
 let valeurBourse = 500;
 
+let timer = 0;
+let fin = false;
+
+reloadEl.classList.add('hidden');
+timeReload.classList.add('hidden');
+
+window.setInterval(()=>{
+    if(money < 0){
+        if (fin == false){
+            fin = true;
+            main.classList.add('hidden');
+            timeReload.textContent = timer + " secondes";
+            timeReload.classList.remove('hidden');
+            reloadEl.classList.remove('hidden');
+        }
+        
+    }
+},1)
+
+
+
+function fTimer() {
+    window.setInterval(()=>{
+        timer = timer+ 1;
+        timerEl.textContent = timer + " secondes";
+    }, 1000);
+}
+
+reloadEl.addEventListener("click", ()=>{
+    location.reload();
+})
+
+
+
+acheterEl.addEventListener("click", () =>{
+    if (valeurAchat <= 0){
+        valeurAchat = valeurBourse;
+        console.log(valeurAchat);
+        acheterText.textContent = valeurAchat;
+        vendreText.textContent = "";
+    } 
+    else {
+        return;
+    }
+})
+vendreEl.addEventListener("click", ()=>{
+    if (valeurAchat > 0){
+        valeurVente = valeurBourse;
+        console.log(valeurVente);
+        console.log(((valeurVente - valeurAchat)* money)/1000);
+        money = money + (((valeurVente-valeurAchat)* money)/1000);
+        money = Math.round(money + 0);
+        moneyEl.textContent = money;
+        valeurAchat = 0;
+        valeurVente = 0;
+        acheterText.textContent = "";
+        vendreText.textContent = valeurVente;
+    }
+    else{
+        return;
+    }
+})
+
 
 
 const buttunPret1 = document.querySelector('#selectpret1');
@@ -304,6 +397,7 @@ buttunPret1.addEventListener("click", () =>{
     moneyMinusEl.textContent = moneyMinus;
     moneyEl.textContent = money;
     startTimerPret ();
+    fTimer();
     return;
 })
 
@@ -327,11 +421,10 @@ function startTimerPret () {
             moneyMinusEl.textContent = moneyMinus;
             isRunning = false;
             isFinished = true;
-            console.log("gerard")
+            pretContainer.classList.add('hidden');
             return;
             
         }
-        console.log ("philippe-michel")
     }, 1000);
 }
 
@@ -352,6 +445,12 @@ window.setInterval(() => {
     valeurBourse = valeurBourse + randomBourse(0, 80);
     valeurBourseEl.textContent = valeurBourse;
     b0El.style.height = valeurBourse/2 + "px";
+    if (b0El.style.height > b1El.style.height){
+        b0El.classList.add('positive');
+    }
+    else{
+        b0El.classList.remove('positive');
+    }
     if(valeurBourse >= 1000){
         valeurBourse = valeurBourse - 100;
         console.log(1000);
@@ -427,6 +526,8 @@ window.setInterval(()=>{
     b2El.style.height = b1El.style.height;
     b1El.style.height = b0El.style.height;
 
+
+    
     if (b1El.style.height > b2El.style.height){
         b1El.classList.add('positive');
     }
@@ -476,7 +577,7 @@ window.setInterval(()=>{
         b8El.classList.remove('positive');
     }
     if (b9El.style.height > b10El.style.height){
-        b1El.classList.add('positive');
+        b9El.classList.add('positive');
     }
     else{
         b9El.classList.remove('positive');
@@ -613,66 +714,185 @@ window.setInterval(()=>{
     }
 
 
-    if (b31El.style.height > b2El.style.height){
-        b1El.classList.add('positive');
+    if (b31El.style.height > b32El.style.height){
+        b31El.classList.add('positive');
     }
     else{
-        b1El.classList.remove('positive');
+        b31El.classList.remove('positive');
     }
-    if (b2El.style.height > b3El.style.height){
-        b2El.classList.add('positive');
-    }
-    else{
-        b2El.classList.remove('positive');
-    }
-    if (b3El.style.height > b4El.style.height){
-        b3El.classList.add('positive');
+    if (b32El.style.height > b33El.style.height){
+        b32El.classList.add('positive');
     }
     else{
-        b3El.classList.remove('positive');
+        b32El.classList.remove('positive');
     }
-    if (b4El.style.height > b5El.style.height){
-        b4El.classList.add('positive');
-    }
-    else{
-        b4El.classList.remove('positive');
-    }
-    if (b5El.style.height > b6El.style.height){
-        b5El.classList.add('positive');
+    if (b33El.style.height > b34El.style.height){
+        b33El.classList.add('positive');
     }
     else{
-        b5El.classList.remove('positive');
+        b33El.classList.remove('positive');
     }
-    if (b6El.style.height > b7El.style.height){
-        b6El.classList.add('positive');
-    }
-    else{
-        b6El.classList.remove('positive');
-    }
-    if (b7El.style.height > b8El.style.height){
-        b7El.classList.add('positive');
+    if (b34El.style.height > b35El.style.height){
+        b34El.classList.add('positive');
     }
     else{
-        b7El.classList.remove('positive');
+        b34El.classList.remove('positive');
     }
-    if (b8El.style.height > b9El.style.height){
-        b8El.classList.add('positive');
-    }
-    else{
-        b8El.classList.remove('positive');
-    }
-    if (b9El.style.height > b10El.style.height){
-        b1El.classList.add('positive');
+    if (b35El.style.height > b36El.style.height){
+        b35El.classList.add('positive');
     }
     else{
-        b9El.classList.remove('positive');
+        b35El.classList.remove('positive');
     }
-    if (b10El.style.height > b11El.style.height){
-        b10El.classList.add('positive');
+    if (b36El.style.height > b37El.style.height){
+        b36El.classList.add('positive');
     }
     else{
-        b10El.classList.remove('positive');
+        b36El.classList.remove('positive');
     }
+    if (b37El.style.height > b38El.style.height){
+        b37El.classList.add('positive');
+    }
+    else{
+        b37El.classList.remove('positive');
+    }
+    if (b38El.style.height > b39El.style.height){
+        b38El.classList.add('positive');
+    }
+    else{
+        b38El.classList.remove('positive');
+    }
+    if (b39El.style.height > b40El.style.height){
+        b39El.classList.add('positive');
+    }
+    else{
+        b39El.classList.remove('positive');
+    }
+    if (b40El.style.height > b41El.style.height){
+        b40El.classList.add('positive');
+    }
+    else{
+        b40El.classList.remove('positive');
+    }
+
+
+    if (b41El.style.height > b42El.style.height){
+        b41El.classList.add('positive');
+    }
+    else{
+        b41El.classList.remove('positive');
+    }
+    if (b42El.style.height > b43El.style.height){
+        b42El.classList.add('positive');
+    }
+    else{
+        b42El.classList.remove('positive');
+    }
+    if (b43El.style.height > b44El.style.height){
+        b43El.classList.add('positive');
+    }
+    else{
+        b43El.classList.remove('positive');
+    }
+    if (b44El.style.height > b45El.style.height){
+        b44El.classList.add('positive');
+    }
+    else{
+        b44El.classList.remove('positive');
+    }
+    if (b45El.style.height > b46El.style.height){
+        b45El.classList.add('positive');
+    }
+    else{
+        b45El.classList.remove('positive');
+    }
+    if (b46El.style.height > b47El.style.height){
+        b46El.classList.add('positive');
+    }
+    else{
+        b46El.classList.remove('positive');
+    }
+    if (b47El.style.height > b48El.style.height){
+        b47El.classList.add('positive');
+    }
+    else{
+        b47El.classList.remove('positive');
+    }
+    if (b48El.style.height > b49El.style.height){
+        b48El.classList.add('positive');
+    }
+    else{
+        b48El.classList.remove('positive');
+    }
+    if (b49El.style.height > b50El.style.height){
+        b49El.classList.add('positive');
+    }
+    else{
+        b49El.classList.remove('positive');
+    }
+    if (b50El.style.height > b51El.style.height){
+        b50El.classList.add('positive');
+    }
+    else{
+        b50El.classList.remove('positive');
+    }
+
+
+    if (b51El.style.height > b52El.style.height){
+        b51El.classList.add('positive');
+    }
+    else{
+        b51El.classList.remove('positive');
+    }
+    if (b52El.style.height > b53El.style.height){
+        b52El.classList.add('positive');
+    }
+    else{
+        b52El.classList.remove('positive');
+    }
+    if (b53El.style.height > b54El.style.height){
+        b53El.classList.add('positive');
+    }
+    else{
+        b53El.classList.remove('positive');
+    }
+    if (b54El.style.height > b55El.style.height){
+        b54El.classList.add('positive');
+    }
+    else{
+        b54El.classList.remove('positive');
+    }
+    if (b55El.style.height > b56El.style.height){
+        b55El.classList.add('positive');
+    }
+    else{
+        b55El.classList.remove('positive');
+    }
+    if (b56El.style.height > b57El.style.height){
+        b56El.classList.add('positive');
+    }
+    else{
+        b56El.classList.remove('positive');
+    }
+    if (b57El.style.height > b58El.style.height){
+        b57El.classList.add('positive');
+    }
+    else{
+        b57El.classList.remove('positive');
+    }
+    if (b58El.style.height > b59El.style.height){
+        b58El.classList.add('positive');
+    }
+    else{
+        b58El.classList.remove('positive');
+    }
+    if (b59El.style.height > b60El.style.height){
+        b59El.classList.add('positive');
+    }
+    else{
+        b59El.classList.remove('positive');
+    }
+
 
 },3000);
 
