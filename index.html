@@ -12,6 +12,8 @@
     font-size: 1rem;
     font-family:sans-serif;
     font-weight: 300;
+    color: white;
+    background-color: rgb(29, 29, 29);
 }
 main{
     display:flex;
@@ -23,7 +25,8 @@ button{
 }
 .container {
     margin: 1rem;
-    border: 1px black solid;
+    border: 1px rgb(183, 183, 183) solid;
+    background-color: rgb(35, 35, 35);
     height: 520px;
     width: 60rem;
     padding: 10px;
@@ -35,7 +38,7 @@ button{
 
 .bar{
     display: block;
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(255, 32, 32);
     width: .5rem;
     height: 0;
     padding: 0;
@@ -43,13 +46,19 @@ button{
 
 }
 .positive{
-    background-color: rgb(0, 155, 0);
+    background-color: rgb(0, 161, 0);
+
 }
 .graduate{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    background-color: rgb(35, 35, 35);
+
+}
+main section div p {
+    background-color: rgb(35, 35, 35);
 }
 .hidden{
     display: none;
@@ -100,6 +109,33 @@ h3{
 .fin{
     margin: 5rem;
 }
+#historical{
+    background-color: rgb(59, 59, 59);
+    width: 54rem;
+    color: white;
+    padding: 1rem;
+    margin: 1rem;
+    height: 20rem;
+    overflow: scroll;
+}
+#historical p {
+    background-color: rgb(59, 59, 59);
+}
+#historical h3 {
+    background-color: rgb(59, 59, 59);
+}
+.flex {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.flexrow {
+    display: flex;
+    text-align: center;
+    gap: 1rem;
+    margin: 1rem;
+}
+
 
 
 </style>
@@ -206,19 +242,38 @@ h3{
             <h3>Valeur de l'action</h3>
             <p> <b id="Vmarche">0</b> $</p>
             <section class="chooseaction">
-                <article>
-                    <p> <b id="Vacheter"></b>   $</p>
-                    <button id="acheter">Acheter</button>
-                </article>
-                <article>
-                    <p> <b id="Vvendre"></b>   $</p>
-                    <button id="vendre">Vendre</button>
-                </article>
+                <section class="flex">
+                    <article>
+                        <label id="rangeText">x0</label>
+                        <input type="range" name="range"
+                        value="0"
+                        min="0"
+                        max="10"
+                        step="1">
+                    </article>
+                    <section class="flexrow">
+                        <article>
+                            <p> <b id="Vacheter"></b>   $</p>
+                            <button id="acheter">Acheter</button>
+                        </article>
+                        <article>
+                            <p> <b id="Vvendre"></b>   $</p>
+                            <button id="vendre">Vendre</button>
+                        </article>
+                    </section>
+
+                </section>
+                    
             </section>
 
         </section>
 
     </main>
+    <section id="historical">
+        <h3>Historique</h3>
+        <h3 id="insert">...</h3>
+
+    </section>
     <section class="fin">
         <h1 id="timeReload">temps</h1>
         <button id="reload">Relancer</button>
@@ -233,6 +288,7 @@ let valeurPretEl = document.querySelector('#Inputtaux');
 let timerPretEl = document.querySelector('#Trembousement');
 let valeurBourseEl = document.querySelector('#Vmarche');
 let pretContainer = document.querySelector('#pretContainer');
+let insertEl = document.querySelector('#insert');
 
 let valeurAchat = 0;
 let valeurVente = 0;
@@ -243,6 +299,8 @@ let vendreText = document.querySelector('#Vvendre');
 let reloadEl = document.querySelector('#reload');
 let timerEl = document.querySelector('#timer');
 let timeReload = document.querySelector('#timeReload');
+let range = document.querySelector('input[name="range"]');
+let rangeText = document.querySelector('#rangeText');
 
 let b0El = document.querySelector('#b0');
 let b1El = document.querySelector('#b1');
@@ -309,7 +367,7 @@ let b60El = document.querySelector('#b60');
 
 let money = 0;
 let moneyMinus = 0;
-let valeurPret = 1;
+let valeurPret = 3;
 let timerPret = 0;
 let validationPret = true;
 let isRunning = false;
@@ -318,9 +376,23 @@ let valeurBourse = 500;
 
 let timer = 0;
 let fin = false;
+let multiplication = 0;
+let multiplicationAchat = 0;
 
 reloadEl.classList.add('hidden');
 timeReload.classList.add('hidden');
+
+insertEl.insertAdjacentHTML("beforeend",
+    `
+    <p>Si vous atteignez moins de 0$, vous perdez.</p>
+    <p>Ceci est votre historique. Faites un prêt pour commencer le jeu.</p>
+
+`);
+
+range.addEventListener("input",()=>{
+    multiplication = range.value;
+    rangeText.textContent = "x" + multiplication;
+})
 
 window.setInterval(()=>{
     if(money < 0){
@@ -356,6 +428,7 @@ acheterEl.addEventListener("click", () =>{
         console.log(valeurAchat);
         acheterText.textContent = valeurAchat;
         vendreText.textContent = "";
+        multiplicationAchat = multiplication;
     } 
     else {
         return;
@@ -364,11 +437,14 @@ acheterEl.addEventListener("click", () =>{
 vendreEl.addEventListener("click", ()=>{
     if (valeurAchat > 0){
         valeurVente = valeurBourse;
-        console.log(valeurVente);
-        console.log(((valeurVente - valeurAchat)* money)/1000);
-        money = money + (((valeurVente-valeurAchat)* money)/1000);
+        money = money + (multiplicationAchat*(((valeurVente-valeurAchat)* money)/1000));
         money = Math.round(money + 0);
         moneyEl.textContent = money;
+        insertEl.insertAdjacentHTML("afterbegin",
+        `
+        <p>${Math.round(multiplicationAchat*(((valeurVente-valeurAchat)* money)/1000))}$ type: vente</p>
+
+        `);
         valeurAchat = 0;
         valeurVente = 0;
         acheterText.textContent = "";
@@ -397,6 +473,11 @@ buttunPret1.addEventListener("click", () =>{
     moneyMinusEl.textContent = moneyMinus;
     moneyEl.textContent = money;
     startTimerPret ();
+    insertEl.insertAdjacentHTML("afterbegin",
+    `
+    <p>+1000$ type: prêt remboursement:-${moneyMinus}$</p>
+
+    `);
     fTimer();
     return;
 })
@@ -417,6 +498,11 @@ function startTimerPret () {
         if (timerPret <= 0){
             money = money - moneyMinus;
             moneyEl.textContent = money;
+            insertEl.insertAdjacentHTML("afterbegin",
+                `
+                <p>-${moneyMinus}$ type: remboursement</p>
+
+            `);
             moneyMinus = 0;
             moneyMinusEl.textContent = moneyMinus;
             isRunning = false;
@@ -445,6 +531,7 @@ window.setInterval(() => {
     valeurBourse = valeurBourse + randomBourse(0, 80);
     valeurBourseEl.textContent = valeurBourse;
     b0El.style.height = valeurBourse/2 + "px";
+
     if (b0El.style.height > b1El.style.height){
         b0El.classList.add('positive');
     }
