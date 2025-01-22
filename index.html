@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GrowthGame.com</title>
 <style>
 * {
     padding: 0;
@@ -437,8 +437,7 @@ acheterEl.addEventListener("click", () =>{
 vendreEl.addEventListener("click", ()=>{
     if (valeurAchat > 0){
         valeurVente = valeurBourse;
-        money = money + (multiplicationAchat*(((valeurVente-valeurAchat)* money)/1000));
-        money = Math.round(money + 0);
+        money = money + Math.round((multiplicationAchat*(((valeurVente-valeurAchat)* money)/1000)));
         moneyEl.textContent = money;
         insertEl.insertAdjacentHTML("afterbegin",
         `
